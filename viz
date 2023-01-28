@@ -17,7 +17,6 @@ The 3d matrix is saved as a gif animation
 """
 
 import sys
-import scipy.misc
 from PIL import Image
 from functools import reduce
 import numpy as np
