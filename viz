@@ -1,0 +1,60 @@
+#!python
+"""
+data is black and white normalized to 0-1
+
+Accepts csv data from stdin where:
+1st item is the dimension (2 or 3)
+Next n_dim items are the dimensions
+the rest is the data
+
+Example a 2d matrix:
+2,2,2,1,2,3,4
+The 2d matrix is saved as a png image
+
+Example a 3d matrix:
+3,2,2,2,1,2,3,4,5,6,7,8
+The 3d matrix is saved as a gif animation
+"""
+
+import sys
+import scipy.misc
+from PIL import Image
+from functools import reduce
+import numpy as np
+
+raw_data = ''.join([ line.strip() for line in sys.stdin ])
+
+meta_data = raw_data.split(',')
+
+n_dim = int(meta_data[0])
+
+assert n_dim == 2 or n_dim == 3, 'Invalid dimension'
+assert len(meta_data) >= n_dim + 1, 'Invalid data'
+
+dims = []
+for i in range(n_dim):
+  dims.append(int(meta_data[i+1]))
+
+flat_data = meta_data[n_dim+1:]
+
+assert len(flat_data) == reduce(lambda x, y: x*y, dims), \
+  f'Expected {reduce(lambda x, y: x*y, dims)} items, got {len(flat_data)}'
+
+data = np.array(flat_data, dtype=float).reshape(dims)
+
+def matrix_to_image(data):
+  if data.max() - data.min() == 0:
+    data_norm = data - data.min()
+  else:
+    data_norm = (data - data.min()) / (data.max() - data.min())
+  return Image.fromarray((data_norm * 255).astype(np.uint8))
+
+if n_dim == 2:
+  matrix_to_image(data).save('out.png')
+elif n_dim == 3:
+  images = []
+  for i in range(dims[0]):
+    images.append(matrix_to_image(data[i]))
+  images[0].save('out.gif', save_all=True, append_images=images[1:], duration=100, loop=0)
+
+
