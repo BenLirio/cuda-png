@@ -1,6 +1,6 @@
 # Viz
 
-Generate images and gif animations from matrix data.
+Viz is a command line tool that converts a stream of numbers into either an image or animation.
 
 ## Installation
 
@@ -9,7 +9,10 @@ Generate images and gif animations from matrix data.
 ```
 
 ## Usage
-In the examples folder run:
+**viz** requires a data, a list of numbers, to be piped into it.
+Then, by using the flags, you can specify how to interpret the data.
+
+
 ```bash
 $ clang img_gen.c -o img_gen
 $ ./img_gen | viz
