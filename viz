@@ -1,5 +1,9 @@
 #!python
+import sys
+import os
+from PIL import Image
 import argparse
+import numpy as np
 
 #######################
 ### Parse arguments ###
@@ -47,27 +51,57 @@ parser.add_argument(
   help='Frame rate (not implemented)',
   required=False,
 )
+parser.add_argument(
+  '--output',
+  type=str,
+  help='Output file',
+  required=True
+)
 
-args = parser.parse_args()
 
 #######################
 ######## Util #########
 #######################
 
+"""
+Parse a csv file
+"""
 def parse_csv(data):
-  """
-  Parse a csv file
-  """
-  Exception('Not implemented')
+  vals = data.strip().split(',')
+  # TODO: Handle when input is not a number
+  return np.array(vals, dtype=float)
 
-def data_to_png(data):
-  """
-  Convert a matrix to an image
-  """
-  Exception('Not implemented')
+"""
+Convert a matrix to an image
+"""
+def data_to_png(data, width, height, encoding):
+  # TODO: Handle when width * height != len(data)
+  if encoding != 'scalar':
+    Exception('Not implemented')
+  low = np.min(data)
+  high = np.max(data)
+  normalized = (data - low) / (high - low)
+  return Image.fromarray(
+    np.array(normalized * 255, dtype=np.uint8).reshape((height, width)),
+    mode='L'
+  )
 
+"""
+Convert a 3D matrix to a gif
+"""
 def data_to_gif(data):
-  """
-  Convert a 3D matrix to a gif
-  """
   Exception('Not implemented')
+
+if __name__ == '__main__':
+  args = parser.parse_args()
+  data = sys.stdin.read()
+  vals = parse_csv(data)
+  if args.output_format == 'png':
+    png = data_to_png(vals, width=args.width, height=args.height, encoding=args.encoding)
+    if args.output.endswith('.png'):
+      png.save('a.png', 'png')
+    else:
+      Exception('Output file must end with .png')
+
+  elif args.output_format == 'gif':
+    Exception('Not implemented')
