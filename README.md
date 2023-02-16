@@ -5,7 +5,7 @@ Viz is a command line tool that converts a stream of numbers into either an imag
 ## Installation
 
 ```bash
-sudo ./install.sh
+./install.sh
 ```
 
 ## Usage
@@ -25,6 +25,8 @@ optional arguments:
                         Color (not implemented)
   --frame-rate FRAME_RATE
                         Frame rate (not implemented)
+
+Example: echo "1,2,3,4" | viz --input-format csv --output-format png --width 2 --height 2 --encoding scalar > out.png
 ```
 
 ## Examples
