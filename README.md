@@ -45,3 +45,10 @@ GIF
 ```bash
 $ echo "1,2,3,4,4,3,2,1" | viz --input-format csv --output-format gif --width 2 --height 2 --frame-rate 30 --encoding scalar
 ```
+
+## TODO
+
+Add mp4 support. This may be useful
+```bash
+ffmpeg -i animated.gif -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" video.mp4
+```

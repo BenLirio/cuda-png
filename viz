@@ -54,6 +54,13 @@ parser.add_argument(
   help='Frame rate (not implemented)',
   required=False,
 )
+parser.add_argument(
+  '--num-frames',
+  type=int,
+  default=-1,
+  help='Number of frames (not implemented)',
+  required=False
+)
 
 
 
@@ -87,8 +94,20 @@ def data_to_png(data, width, height, encoding):
 """
 Convert a 3D matrix to a gif
 """
-def data_to_gif(data):
-  Exception('Not implemented')
+def data_to_gif(data, num_frames, height, width, encoding):
+  if encoding != 'scalar':
+    Exception('Not implemented')
+  low = np.min(data)
+  high = np.max(data)
+  normalized = (data - low) / (high - low)
+  frames = normalized.reshape((num_frames, height, width))
+  images = []
+  for i in range(num_frames):
+    images.append(Image.fromarray(
+      (frames[i]*255).astype(np.uint8)
+    ))
+  return images
+
 
 if __name__ == '__main__':
   args = parser.parse_args()
@@ -99,4 +118,10 @@ if __name__ == '__main__':
     png.save(sys.stdout, 'png')
 
   elif args.output_format == 'gif':
-    Exception('Not implemented')
+    gif = data_to_gif(
+      vals,
+      num_frames=args.num_frames,
+      height=args.height,
+      width=args.width,
+      encoding=args.encoding)
+    gif[0].save(sys.stdout, 'gif', save_all=True, append_images=gif[1:])
