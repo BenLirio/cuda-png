@@ -11,6 +11,9 @@ import numpy as np
 parser = argparse.ArgumentParser(
   prog = 'Viz',
   description = 'Visualize data',
+  epilog="""Example:
+echo "1,2,3,4" | viz --input-format csv --output-format png --width 2 --height 2 --encoding scalar > out.png
+"""
 )
 parser.add_argument(
   '--input-format',
@@ -51,12 +54,7 @@ parser.add_argument(
   help='Frame rate (not implemented)',
   required=False,
 )
-parser.add_argument(
-  '--output',
-  type=str,
-  help='Output file',
-  required=True
-)
+
 
 
 #######################
@@ -98,10 +96,7 @@ if __name__ == '__main__':
   vals = parse_csv(data)
   if args.output_format == 'png':
     png = data_to_png(vals, width=args.width, height=args.height, encoding=args.encoding)
-    if args.output.endswith('.png'):
-      png.save('a.png', 'png')
-    else:
-      Exception('Output file must end with .png')
+    png.save(sys.stdout, 'png')
 
   elif args.output_format == 'gif':
     Exception('Not implemented')
