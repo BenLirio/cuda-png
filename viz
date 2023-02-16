@@ -1,7 +1,4 @@
 #!python
-import sys
-from PIL import Image
-import numpy as np
 import argparse
 
 #######################
@@ -12,14 +9,14 @@ parser = argparse.ArgumentParser(
   description = 'Visualize data',
 )
 parser.add_argument(
-  '--format',
+  '--input-format',
   type=str,
   help='Input Format (not implemented)',
   required=True,
   choices=['csv'],
 )
 parser.add_argument(
-  '--type',
+  '--output-format',
   type=str,
   help='Output type (not implemented)',
   required=True,
@@ -38,15 +35,16 @@ parser.add_argument(
   help='Height (not implemented)',
 )
 parser.add_argument(
-  '--color',
-  action='store_true',
+  '--encoding',
+  type=str,
   help='Color (not implemented)',
+  choices=['scalar', 'rgb', 'rgba'],
 )
 parser.add_argument(
-  '--speed',
+  '--frame-rate',
   type=int,
   default=100,
-  help='Gif speed (ms) (not implemented)',
+  help='Frame rate (not implemented)',
   required=False,
 )
 
